@@ -1,0 +1,125 @@
+/* Lewy panel (akordeon) */
+  .left {
+    background-color: #15141A;
+  }
+  
+  /* Prawy panel (podgląd) */
+  .right {
+    background-color: #15141A;
+  }
+
+  .btn-generate {
+    width: 100%;
+    background-color: #15141A;
+    text-align: start;
+    color: #fff;
+    padding: 10px 16px;
+    font-size: 14px;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.6); /* niebieski glow */
+  }
+  
+  .btn-generate:hover {
+    background-color: #0099FF;
+    border-color: #cbd5dc;
+    box-shadow: 0 0 12px rgba(0, 123, 255, 0.9);
+  }
+  
+  
+  .accordion{
+    border: 1px solid #0099FF;
+    border-radius: 4px;
+
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.6); /* niebieski glow */
+    transition: box-shadow 0.3s ease-in-out;
+  }
+  /* Cały element akordeonu */
+  .accordion-item {
+    background-color: #15141A;
+    margin-bottom: 0;
+    border: none; /* USUWA WSZYSTKIE OBRAMOWANIA */
+    border-radius: 0;
+
+    font-size: 12px;
+  }
+  
+  /* Nagłówek akordeonu */
+  .accordion-button {
+    background-color: #15141A;
+    color: #fff;
+    box-shadow: none;
+    border: none; /* USUWA OBRAMOWANIA PRZYCISKU */
+    border-radius: 0;
+  }
+  
+  /* Rozwinięty stan */
+  .accordion-button:not(.collapsed) {
+    background-color: #15141A;
+    color: #fff;
+  }
+  
+  /* Ikona strzałki – biała */
+  .accordion-button::after {
+    filter: invert(1);
+  }
+  
+  /* Treść akordeonu */
+  .accordion-body {
+    background-color: #15141A;
+    color: #fff;
+  }
+  
+  /* Rozwijany kontener */
+  .accordion-collapse {
+    background-color: #15141A;
+    border: none; /* Na wszelki wypadek */
+  }
+  
+  .form-control-sm{
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.5;
+    border-radius: 8px;
+  
+    background-color: #1d1b2f;
+    color: #ffffff;
+    border: 1px solid #0099FF;
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  }
+
+  .form-control-sm:focus {
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.6);
+  }
+
+  .form-select-sm{
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.5;
+    border-radius: 8px;
+  
+    background-color: #1d1b2f;
+    color: #ffffff;
+    border: 1px solid #0099FF;
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  }
+
+  .form-select-sm:focus {
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.6);
+  }
+  
+  .form-label{
+    font-size: 12px;
+  }
+
+  .btn-abi{
+    border: 1px solid #0099FF;
+    background-color: #1d1b2f;
+    color: #fff;
+  }
+
+  .btn-abi:hover{
+    background-color: #0099FF;
+    border: 1px solid #cbd5dc;
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.6);
+  }

@@ -1,0 +1,23 @@
+:root {
+  --main-blue: #0099FF;
+  --backgorund-color: #EAF6FF;
+}
+
+h1 {
+  font-size: 64px;
+  font-weight: extra-bold;
+}
+
+h2 {
+  font-size: 48px;
+  font-weight: bold;
+}
+
+h3 {
+  font-size: 24px;
+  font-weight: bold;
+}
+p {
+  font-size: 20px;
+  font-weight: regular;
+}
