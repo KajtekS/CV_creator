@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const Cert = ({ onAddCert = () => {} }) => {
+  const { t } = useTranslation();
   const [form, setForm] = useState({
     nazwa: '',
     data: '',
@@ -44,7 +46,7 @@ const Cert = ({ onAddCert = () => {} }) => {
     <>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
-          <label htmlFor="nazwa" className="form-label">Nazwa</label>
+          <label htmlFor="nazwa" className="form-label">{t('name')}</label>
           <input
             type="text"
             className="form-control-sm"
@@ -56,7 +58,7 @@ const Cert = ({ onAddCert = () => {} }) => {
         </div>
 
         <div className="mb-3">
-          <label htmlFor="data" className="form-label">Data</label>
+          <label htmlFor="data" className="form-label">{t('date')}</label>
           <input
             type="date"
             className="form-control-sm"
@@ -68,7 +70,7 @@ const Cert = ({ onAddCert = () => {} }) => {
         </div>
 
         <div className="mb-3">
-          <label htmlFor="organizator" className="form-label">Organizator</label>
+          <label htmlFor="organizator" className="form-label">{t('organizer')}</label>
           <input
             type="text"
             className="form-control-sm"
@@ -80,7 +82,7 @@ const Cert = ({ onAddCert = () => {} }) => {
         </div>
 
         <div className="mb-3">
-          <label htmlFor="opis" className="form-label">Opis</label>
+          <label htmlFor="opis" className="form-label">{t('description')}</label>
           <input
             type="text"
             className="form-control-sm"
@@ -89,12 +91,12 @@ const Cert = ({ onAddCert = () => {} }) => {
             value={form.opis}
             readOnly
             onClick={openModal}
-            placeholder="Kliknij, aby wpisać opis"
+            placeholder={t('placeholderDescription')}
             style={{ cursor: 'pointer' }}
           />
         </div>
 
-        <button type="submit" className="btn btn-abi">Dodaj</button>
+        <button type="submit" className="btn btn-abi">{t('add')}</button>
       </form>
 
       {modalOpen && (
@@ -112,7 +114,7 @@ const Cert = ({ onAddCert = () => {} }) => {
           >
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title">Wpisz opis</h5>
+                <h5 className="modal-title">{t('modalTitle')}</h5>
                 <button
                   type="button"
                   className="btn-close"
@@ -131,10 +133,10 @@ const Cert = ({ onAddCert = () => {} }) => {
               </div>
               <div className="modal-footer">
                 <button type="button" className="btn btn-secondary" onClick={closeModal}>
-                  Anuluj
+                  {t('cancel')}
                 </button>
                 <button type="button" className="btn btn-primary" onClick={saveOpis}>
-                  Zapisz
+                  {t('save')}
                 </button>
               </div>
             </div>

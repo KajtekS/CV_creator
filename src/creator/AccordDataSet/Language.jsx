@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const levels = [
   { code: 'A1' },
@@ -10,6 +11,7 @@ const levels = [
 ];
 
 const Language = ({ onAddLanguage = () => {} }) => {
+  const { t } = useTranslation();
   const [form, setForm] = useState({
     language: '',
     level: '',
@@ -33,7 +35,7 @@ const Language = ({ onAddLanguage = () => {} }) => {
   return (
     <form onSubmit={handleSubmit}>
       <div className="mb-1">
-        <label htmlFor="language" className="form-label">Język</label>
+        <label htmlFor="language" className="form-label">{t('language')}</label>
         <input
           type="text"
           className="form-control-sm"
@@ -45,7 +47,7 @@ const Language = ({ onAddLanguage = () => {} }) => {
       </div>
 
       <div className="mb-3">
-        <label htmlFor="level" className="form-label-sm me-5">Poziom</label>
+        <label htmlFor="level" className="form-label-sm me-5">{t('level')}</label>
         <select
           className="form-select-sm"
           id="level"
@@ -53,7 +55,7 @@ const Language = ({ onAddLanguage = () => {} }) => {
           value={form.level}
           onChange={handleChange}
         >
-          <option value="">-- wybierz poziom --</option>
+          <option value="">{t('selectLevelPlaceholder')}</option>
           {levels.map((level) => (
             <option key={level.code} value={level.code}>
               {level.code}
@@ -62,8 +64,9 @@ const Language = ({ onAddLanguage = () => {} }) => {
         </select>
       </div>
 
-      <button type="submit" className="btn btn-abi">Dodaj</button>
+      <button type="submit" className="btn btn-abi">{t('add')}</button>
     </form>
+
   );
 };
 

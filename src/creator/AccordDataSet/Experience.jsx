@@ -1,24 +1,35 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import "./experience_style.css";
 
-const Experience = ({ onAddExperience = () => {} }) => {
-  const [form, setForm] = useState({
+const Experience = ({ onAddExperience = () => {}, onRemoveExperience = () => {} }) => {
+  const { t } = useTranslation();
+
+  // Tablica doświadczeń
+  const [form, setForm] = useState([]);
+
+  // Pojedynczy formularz do wypełnienia
+  const [newExperience, setNewExperience] = useState({
     dataStart: '',
     dataEnd: '',
     firma: '',
-    stanowisko: '',       // 🔹 Dodane pole
+    stanowisko: '',
     lokalizacja: '',
     opis: ''
   });
 
   const [tempOpis, setTempOpis] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
+  const [deletePanel, setDeletePanel] = useState(false);
 
+  // Obsługa zmiany pojedynczego formularza
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setNewExperience({ ...newExperience, [e.target.name]: e.target.value });
   };
 
+  // Otwórz modal z opisem do edycji
   const openModal = () => {
-    setTempOpis(form.opis);
+    setTempOpis(newExperience.opis);
     setModalOpen(true);
   };
 
@@ -27,20 +38,23 @@ const Experience = ({ onAddExperience = () => {} }) => {
   };
 
   const saveOpis = () => {
-    setForm({ ...form, opis: tempOpis });
+    setNewExperience({ ...newExperience, opis: tempOpis });
     closeModal();
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!form.firma && !form.opis) {
-      alert('Wypełnij minimum pole Firma lub Opis');
+
+    if (!newExperience.firma && !newExperience.opis) {
+      alert(t('fillAtLeastCompanyOrDescription') || 'Wypełnij minimum pole Firma lub Opis');
       return;
     }
 
-    onAddExperience(form);
+    setForm(prev => [...prev, newExperience]);
 
-    setForm({
+    onAddExperience(newExperience);
+
+    setNewExperience({
       dataStart: '',
       dataEnd: '',
       firma: '',
@@ -50,88 +64,105 @@ const Experience = ({ onAddExperience = () => {} }) => {
     });
   };
 
+  const handleDelete = (index) => {
+  const updatedForm = form.filter((_, i) => i !== index);
+  setForm(updatedForm);
+  onRemoveExperience(updatedForm);
+  };
+
+
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label htmlFor="dataStart" className="form-label">Data od</label>
-          <input
-            type="date"
-            className="form-control-sm"
-            id="dataStart"
-            name="dataStart"
-            value={form.dataStart}
-            onChange={handleChange}
-          />
-        </div>
+      {/* Formularz dodawania nowego doświadczenia */}
+      {!deletePanel && (
+        <form onSubmit={handleSubmit}>
+          <div className="mb-3">
+            <label htmlFor="dataStart" className="form-label">{t('startDate')}</label>
+            <input
+              type="date"
+              className="form-control-sm"
+              id="dataStart"
+              name="dataStart"
+              value={newExperience.dataStart}
+              onChange={handleChange}
+            />
+          </div>
 
-        <div className="mb-3">
-          <label htmlFor="dataEnd" className="form-label">Data do</label>
-          <input
-            type="date"
-            className="form-control-sm"
-            id="dataEnd"
-            name="dataEnd"
-            value={form.dataEnd}
-            onChange={handleChange}
-          />
-        </div>
+          <div className="mb-3">
+            <label htmlFor="dataEnd" className="form-label">{t('endDate')}</label>
+            <input
+              type="date"
+              className="form-control-sm"
+              id="dataEnd"
+              name="dataEnd"
+              value={newExperience.dataEnd}
+              onChange={handleChange}
+            />
+          </div>
 
-        <div className="mb-3">
-          <label htmlFor="firma" className="form-label">Firma</label>
-          <input
-            type="text"
-            className="form-control-sm"
-            id="firma"
-            name="firma"
-            value={form.firma}
-            onChange={handleChange}
-          />
-        </div>
+          <div className="mb-3">
+            <label htmlFor="firma" className="form-label">{t('company')}</label>
+            <input
+              type="text"
+              className="form-control-sm"
+              id="firma"
+              name="firma"
+              value={newExperience.firma}
+              onChange={handleChange}
+            />
+          </div>
 
-        <div className="mb-3">
-          <label htmlFor="stanowisko" className="form-label">Stanowisko</label>
-          <input
-            type="text"
-            className="form-control-sm"
-            id="stanowisko"
-            name="stanowisko"
-            value={form.stanowisko}
-            onChange={handleChange}
-          />
-        </div>
+          <div className="mb-3">
+            <label htmlFor="stanowisko" className="form-label">{t('position')}</label>
+            <input
+              type="text"
+              className="form-control-sm"
+              id="stanowisko"
+              name="stanowisko"
+              value={newExperience.stanowisko}
+              onChange={handleChange}
+            />
+          </div>
 
-        <div className="mb-3">
-          <label htmlFor="lokalizacja" className="form-label">Lokalizacja</label>
-          <input
-            type="text"
-            className="form-control-sm"
-            id="lokalizacja"
-            name="lokalizacja"
-            value={form.lokalizacja}
-            onChange={handleChange}
-          />
-        </div>
+          <div className="mb-3">
+            <label htmlFor="lokalizacja" className="form-label">{t('location')}</label>
+            <input
+              type="text"
+              className="form-control-sm"
+              id="lokalizacja"
+              name="lokalizacja"
+              value={newExperience.lokalizacja}
+              onChange={handleChange}
+            />
+          </div>
 
-        <div className="mb-3">
-          <label htmlFor="opis" className="form-label">Opis</label>
-          <input
-            type="text"
-            className="form-control-sm"
-            id="opis"
-            name="opis"
-            value={form.opis}
-            readOnly
-            onClick={openModal}
-            placeholder="Kliknij, aby wpisać opis"
-            style={{ cursor: 'pointer' }}
-          />
-        </div>
+          <div className="mb-3">
+            <label htmlFor="opis" className="form-label">{t('description')}</label>
+            <input
+              type="text"
+              className="form-control-sm"
+              id="opis"
+              name="opis"
+              value={newExperience.opis}
+              readOnly
+              onClick={openModal}
+              placeholder={t('placeholderDescription')}
+              style={{ cursor: 'pointer' }}
+            />
+          </div>
 
-        <button type="submit" className="btn btn-abi">Dodaj</button>
-      </form>
+          <button type="submit" className="btn btn-abi">{t('add')}</button>
+          <button
+            type="button"
+            onClick={() => setDeletePanel(prev => !prev)}
+            className="btn btn-abi ms-2"
+          >
+            {t('delete')}
+          </button>
+        </form>
+      )}
 
-      {/* Modal */}
+      {/* Modal do edycji opisu */}
       {modalOpen && (
         <div
           className="modal fade show"
@@ -147,7 +178,7 @@ const Experience = ({ onAddExperience = () => {} }) => {
           >
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title">Wpisz opis</h5>
+                <h5 className="modal-title">{t('enterDescription') || 'Wpisz opis'}</h5>
                 <button
                   type="button"
                   className="btn-close"
@@ -166,14 +197,36 @@ const Experience = ({ onAddExperience = () => {} }) => {
               </div>
               <div className="modal-footer">
                 <button type="button" className="btn btn-secondary" onClick={closeModal}>
-                  Anuluj
+                  {t('cancel') || 'Anuluj'}
                 </button>
                 <button type="button" className="btn btn-primary" onClick={saveOpis}>
-                  Zapisz
+                  {t('save') || 'Zapisz'}
                 </button>
               </div>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Lista doświadczeń */}
+      {deletePanel && (
+        <div className="container mt-3">
+          <ul className="list-group">
+            {form.map((data, id) => (
+              <li key={id} className="list-group-item d-flex justify-content-between align-items-start list-item-style">
+                  <div>
+                    <strong>{data.firma}</strong> | {data.stanowisko} <br />
+                  </div>
+                  <button
+                    className="btn btn-abi btn-sm"
+                    onClick={() => handleDelete(id)}
+                  >
+                  {t('delete')}
+                </button>
+              </li>
+            ))}
+          </ul>
+          <button className='btn btn-abi' onClick={() => setDeletePanel(prev => !prev)}>{t('back')}</button>
         </div>
       )}
     </>

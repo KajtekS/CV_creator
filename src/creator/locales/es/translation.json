@@ -1,0 +1,50 @@
+{
+  "personalData": "Datos personales",
+  "education": "Educación",
+  "experience": "Experiencia laboral",
+  "certificates": "Formaciones, cursos, certificados",
+  "languages": "Idiomas",
+  "skills": "Habilidades",
+
+  "//": "DatosPersonales",
+
+  "name": "Nombre",
+  "surname": "Apellido",
+  "dateofbirth": "Fecha de nacimiento",
+  "country": "País de residencia",
+  "city": "Ciudad",
+  "number": "Número de teléfono",
+  "email": "Correo electrónico",
+  "description": "Descripción",
+
+  "//": "Estudios",
+
+  "educationLevel": "Nivel educativo",
+  "school": "Escuela",
+  "startDate": "Fecha de inicio",
+  "endDate": "Fecha de finalización",
+  "clickToAddDescription": "Haz clic para añadir una descripción",
+  "enterEducationDescription": "Introduce una descripción educativa",
+  "cancel": "Cancelar",
+  "save": "Guardar",
+  "add": "Añadir",
+  "input": "Haz clic para añadir una descripción",
+
+  "//": "Experiencia",
+  "company": "Empresa",
+  "position": "Puesto",
+  "location": "Ubicación",
+  "placeholderDescription": "Haz clic para introducir una descripción",
+  "modalTitle": "Introducir descripción",
+
+  "//": "Certificados",
+  "date": "Fecha",
+  "organizer": "Organizador",
+
+  "//": "Idiomas",
+  "language": "Idioma",
+  "level": "Nivel",
+  "selectLevelPlaceholder": "-- Seleccionar nivel --",
+
+  "generate": "Generar"
+}

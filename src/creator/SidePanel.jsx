@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import AccordionItem from './AccordionItem';
 import PersonalDataForm from './AccordDataSet/PersonalDataForm';
 import Study from './AccordDataSet/Study';
@@ -6,104 +6,94 @@ import Experience from './AccordDataSet/Experience';
 import Cert from './AccordDataSet/Cert';
 import Language from './AccordDataSet/Language';
 import Abilities from './AccordDataSet/Abilities';
-import PdfPage from './PdfSheets/PdfPage';
-import PdfDisplay from './PdfDisplay';
-import GitHub from './PdfSheets/GitHub';
+import { useTranslation } from 'react-i18next';
 
-import { PDFViewer } from '@react-pdf/renderer';
-import PdfErrorBoundary from './PdfErrorBoundary';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './styles.css';
 import PageSimulator from './PdfSheets/PageSimulator';
 
-const handleGeneratePDF = async () => {
-  const cvData = {
-    personalData,
-    study,
-    experience,
-    cert,
-    language,
-    abilities
+const AccordionList = () => {
+  const pageSimulatorRef = useRef();
+
+  const { t, i18n } = useTranslation();
+
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
   };
 
-  try {
-    const res = await fetch("http://localhost:5173/generate-pdf", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(cvData),
-    });
-
-    const blob = await res.blob();
-    const url = window.URL.createObjectURL(new Blob([blob]));
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", "cv.pdf");
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-  } catch (error) {
-    console.error("PDF generation failed:", error);
-  }
-};
-
-
-const AccordionList = () => {
   const [personalData, setPersonalData] = useState([]);
   const [study, setStudy] = useState([]);
-  const [experience, setExperience] = useState([]); // <-- poprawnie
+  const [experience, setExperience] = useState([]);
   const [cert, setCert] = useState([]);
   const [language, setLanguage] = useState([]);
   const [abilities, setAbilities] = useState([]);
+
+  const buttons = [
+    {language: 'pl', icon: '🇵🇱'},
+    {language: 'en', icon: '🇬🇧'},
+    {language: 'de', icon: '🇩🇪'},
+    {language: 'es', icon: '🇪🇸'},
+    {language: 'fr', icon: '🇫🇷'},
+  ];
 
   return (
     <div className="container-fluid">
       <div className="row min-vh-100">
         <div className="col-3 p-4 right">
+          <div className="d-flex justify-content-center mb-3" >
+            {buttons.map((but, id) => (
+              <button onClick={() => changeLanguage(but.language)} className="btn btn-sm btn-style me-2">
+              {but.icon}
+            </button>
+            ))}
+          </div>
+
           <div className="accordion" id="accordionExample">
-            <button className='btn btn-generate w-100' onClick={handleGeneratePDF}>Generuj</button>
-            <AccordionItem id="panel1" title="Dane osobowe" defaultOpen={true} className="rounded-top">
+            <AccordionItem id="panel1" title={t('personalData')} defaultOpen={true} className="rounded-top">
               <PersonalDataForm setPersonalData={setPersonalData} />
             </AccordionItem>
 
-            <AccordionItem id="panel2" title="Wykształcenie">
-              <Study onAddStudy={(newStudy) => (setStudy(prev => [...prev, newStudy]))} />
+            <AccordionItem id="panel2" title={t('education')}>
+              <Study onAddStudy={(newStudy) => setStudy(prev => [...prev, newStudy])} />
             </AccordionItem>
 
-            <AccordionItem id="panel3" title="Doświadczenie Zawodowe">
-              <Experience onAddExperience={(newExp) => setExperience(prev => [...prev, newExp])} />
+            <AccordionItem id="panel3" title={t('experience')}>
+              <Experience onAddExperience={(newExp) => setExperience(prev => [...prev, newExp])} onRemoveExperience={(updatedlist) => {
+                setExperience(updatedlist);
+              }}/>
             </AccordionItem>
 
-
-            <AccordionItem id="panel4" title="Szkolenia, kursy, certyfikaty">
-              <Cert onAddCert={(newCert) => setCert(prev => 
-                [...prev, newCert]
-              )}/>
+            <AccordionItem id="panel4" title={t('certificates')}>
+              <Cert onAddCert={(newCert) => setCert(prev => [...prev, newCert])} />
             </AccordionItem>
 
-            <AccordionItem id="panel5" title="Języki">
-              <Language onAddLanguage={(newLang) => setLanguage(prev => [...prev, newLang])}/>
+            <AccordionItem id="panel5" title={t('languages')}>
+              <Language onAddLanguage={(newLang) => setLanguage(prev => [...prev, newLang])} />
             </AccordionItem>
 
-            <AccordionItem id="panel6" title="Umiejętności">
-              <Abilities onAddSkill={(newSkill) => setAbilities(prev => [...prev, newSkill])}/>
+            <AccordionItem id="panel6" title={t('skills')}>
+              <Abilities onAddSkill={(newSkill) => setAbilities(prev => [...prev, newSkill])} />
             </AccordionItem>
           </div>
+          <div className='justify-content-center'>
+          <button className='btn btn-style btn-sm mt-2' onClick={() =>    pageSimulatorRef.current.generatePdf()}>{t('generate')}</button>
+          </div>
         </div>
-        <div className="col-1 left">
-        </div>
-        <div className="col-7 bg bg-white">
+
+        <div className="col-7" style={{ backgroundColor: "#15141A" }}>
           <PageSimulator
-              personalData={personalData}
-              study={study}
-              experience={experience}
-              cert={cert}
-              language={language}
-              abilities={abilities}
+            ref={pageSimulatorRef}
+            personalData={personalData}
+            study={study}
+            experience={experience}
+            cert={cert}
+            language={language}
+            abilities={abilities}
           />
         </div>
-        <div className="col-1 left">
-        </div>
+
+        <div className='col-2' style={{ backgroundColor: "#15141A" }}></div>
       </div>
     </div>
   );

@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
-function StudyForm({ onAddStudy = () => {}}) {
+function StudyForm({ onAddStudy = () => {} }) {
+  const { t } = useTranslation();
+
   const [form, setForm] = useState({
     poziom: '',
     szkola: '',
@@ -50,7 +53,7 @@ function StudyForm({ onAddStudy = () => {}}) {
     <>
       <form onSubmit={handleSubmit}>
         <div className="mb-1">
-          <label htmlFor="poziom" className="form-label-sm">Poziom Wykształcenia</label>
+          <label htmlFor="poziom" className="form-label-sm">{t('educationLevel')}</label>
           <input
             type="text"
             className="form-control-sm"
@@ -62,7 +65,7 @@ function StudyForm({ onAddStudy = () => {}}) {
         </div>
 
         <div className="mb-1">
-          <label htmlFor="szkola" className="form-label-sm">Szkoła</label>
+          <label htmlFor="szkola" className="form-label-sm">{t('school')}</label>
           <input
             type="text"
             className="form-control-sm"
@@ -74,7 +77,7 @@ function StudyForm({ onAddStudy = () => {}}) {
         </div>
 
         <div className="mb-1">
-          <label className="form-label-sm">Data od</label>
+          <label className="form-label-sm">{t('startDate')}</label>
           <input
             type="date"
             className="form-control-sm"
@@ -85,7 +88,7 @@ function StudyForm({ onAddStudy = () => {}}) {
         </div>
 
         <div className="mb-2">
-          <label className="form-label-sm">Data do</label>
+          <label className="form-label-sm">{t('endDate')}</label>
           <input
             type="date"
             className="form-control-sm"
@@ -96,7 +99,7 @@ function StudyForm({ onAddStudy = () => {}}) {
         </div>
 
         <div className="mb-3">
-          <label className="form-label-sm">Opis</label>
+          <label className="form-label-sm">{t('description')}</label>
           <input
             type="text"
             className="form-control-sm"
@@ -104,12 +107,12 @@ function StudyForm({ onAddStudy = () => {}}) {
             value={form.opis}
             onClick={openModal}
             readOnly
-            placeholder="Kliknij, aby dodać opis"
+            placeholder={t('clickToAddDescription')}
             style={{ cursor: 'pointer' }}
           />
         </div>
 
-        <button type="submit" className="btn btn-abi">Dodaj</button>
+        <button type="submit" className="btn btn-abi">{t('add')}</button>
       </form>
 
       {/* Modal */}
@@ -128,7 +131,7 @@ function StudyForm({ onAddStudy = () => {}}) {
           >
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title">Wpisz opis edukacji</h5>
+                <h5 className="modal-title">{t('enterEducationDescription')}</h5>
                 <button type="button" className="btn-close" onClick={closeModal}></button>
               </div>
               <div className="modal-body">
@@ -141,8 +144,8 @@ function StudyForm({ onAddStudy = () => {}}) {
                 ></textarea>
               </div>
               <div className="modal-footer">
-                <button className="btn btn-secondary" onClick={closeModal}>Anuluj</button>
-                <button className="btn btn-primary" onClick={saveOpis}>Zapisz</button>
+                <button className="btn btn-secondary" onClick={closeModal}>{t('cancel')}</button>
+                <button className="btn btn-primary" onClick={saveOpis}>{t('save')}</button>
               </div>
             </div>
           </div>

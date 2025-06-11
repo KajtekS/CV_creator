@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const PersonalDataForm = ({ setPersonalData }) => {
+  const { t } = useTranslation();
+
   const [form, setForm] = useState({
     imie: '',
     nazwisko: '',
@@ -45,13 +48,13 @@ const PersonalDataForm = ({ setPersonalData }) => {
     <>
       <form onSubmit={handleSubmit}>
         {[
-          { label: 'Imię', name: 'imie' },
-          { label: 'Nazwisko', name: 'nazwisko' },
-          { label: 'Data urodzenia', name: 'dataUrodzenia', type: 'date' },
-          { label: 'Kraj zamieszkania', name: 'kraj' },
-          { label: 'Miasto', name: 'miasto' },
-          { label: 'Numer', name: 'numer' },
-          { label: 'Email', name: 'email' },
+          { label: t('name'), name: 'imie' },
+          { label: t('surname'), name: 'nazwisko' },
+          { label: t('dateofbirth'), name: 'dataUrodzenia', type: 'date' },
+          { label: t('country'), name: 'kraj' },
+          { label: t('city'), name: 'miasto' },
+          { label: t('number'), name: 'numer' },
+          { label: t('email'), name: 'email' },
         ].map(({ label, name, type = 'text' }) => (
           <div className="mb-1" key={name}>
             <label htmlFor={name} className="form-label">{label}</label>
@@ -68,7 +71,7 @@ const PersonalDataForm = ({ setPersonalData }) => {
 
         {/* 🔹 Opis jako modal */}
         <div className="mb-2">
-          <label htmlFor="opis" className="form-label">Opis</label>
+          <label htmlFor="opis" className="form-label">{t('description')}</label>
           <input
             type="text"
             className="form-control-sm"
@@ -77,12 +80,12 @@ const PersonalDataForm = ({ setPersonalData }) => {
             value={form.opis}
             readOnly
             onClick={openModal}
-            placeholder="Kliknij, aby wpisać opis"
+            placeholder={t('input')}
             style={{ cursor: 'pointer' }}
           />
         </div>
 
-        <button type="submit" className="btn btn-abi">Zapisz</button>
+        <button type="submit" className="btn btn-abi">{t('save')}</button>
       </form>
 
       {modalOpen && (

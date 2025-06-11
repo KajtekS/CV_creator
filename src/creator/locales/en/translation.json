@@ -1,0 +1,50 @@
+{
+  "personalData": "Personal Data",
+  "education": "Education",
+  "experience": "Work Experience",
+  "certificates": "Trainings, Courses, Certificates",
+  "languages": "Languages",
+  "skills": "Skills",
+
+  "//": "PersonalData",
+
+  "name": "First Name",
+  "surname": "Last Name",
+  "dateofbirth": "Date of Birth",
+  "country": "Country of Residence",
+  "city": "City",
+  "number": "Phone Number",
+  "email": "Email",
+  "description": "Description",
+
+  "//": "Study",
+
+  "educationLevel": "Level of Education",
+  "school": "School",
+  "startDate": "Start Date",
+  "endDate": "End Date",
+  "clickToAddDescription": "Click to add description",
+  "enterEducationDescription": "Enter education description",
+  "cancel": "Cancel",
+  "save": "Save",
+  "add": "Add",
+  "input": "Click to add description",
+
+  "//": "Experience",
+  "company": "Company",
+  "position": "Position",
+  "location": "Location",
+  "placeholderDescription": "Click to enter description",
+  "modalTitle": "Enter description",
+
+  "//": "Cert",
+  "date": "Date",
+  "organizer": "Organizer",
+
+  "//": "Languages",
+  "language": "Language",
+  "level": "Level",
+  "selectLevelPlaceholder": "-- select level --",
+
+  "generate": "generate"
+}
