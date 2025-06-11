@@ -55,7 +55,7 @@ const AccordionList = () => {
             </AccordionItem>
 
             <AccordionItem id="panel2" title={t('education')}>
-              <Study onAddStudy={(newStudy) => setStudy(prev => [...prev, newStudy])} />
+              <Study onAddStudy={(newStudy) => setStudy(prev => [...prev, newStudy])} onRemoveStudy={(newStudy) => setStudy(newStudy)}/>
             </AccordionItem>
 
             <AccordionItem id="panel3" title={t('experience')}>
@@ -65,15 +65,15 @@ const AccordionList = () => {
             </AccordionItem>
 
             <AccordionItem id="panel4" title={t('certificates')}>
-              <Cert onAddCert={(newCert) => setCert(prev => [...prev, newCert])} />
+              <Cert onAddCert={(newCert) => setCert(prev => [...prev, newCert])} onRemoveCert={(newCert) => {setCert(newCert);}}/>
             </AccordionItem>
 
             <AccordionItem id="panel5" title={t('languages')}>
-              <Language onAddLanguage={(newLang) => setLanguage(prev => [...prev, newLang])} />
+              <Language onAddLanguage={(newLang) => setLanguage(prev => [...prev, newLang])} onRemoveLanguage={(newLang) => setLanguage(newLang)}/>
             </AccordionItem>
 
             <AccordionItem id="panel6" title={t('skills')}>
-              <Abilities onAddSkill={(newSkill) => setAbilities(prev => [...prev, newSkill])} />
+              <Abilities onAddSkill={(newSkill) => setAbilities(prev => [...prev, newSkill])} onRemoveSkill={(newSkills) => setAbilities(newSkills)}/>
             </AccordionItem>
           </div>
           <div className='justify-content-center'>

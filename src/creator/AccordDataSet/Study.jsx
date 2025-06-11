@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-function StudyForm({ onAddStudy = () => {} }) {
+function StudyForm({ onAddStudy = () => {}, onRemoveStudy = () => {} }) {
   const { t } = useTranslation();
 
-  const [form, setForm] = useState({
+  const [form, setForm] = useState([]); // lista studiów
+  const [modalOpen, setModalOpen] = useState(false);
+  const [deletePanel, setDeletePanel] = useState(false);
+  const [tempOpis, setTempOpis] = useState('');
+
+  const [newStudy, setNewStudy] = useState({
     poziom: '',
     szkola: '',
     dataStart: '',
@@ -12,21 +17,21 @@ function StudyForm({ onAddStudy = () => {} }) {
     opis: ''
   });
 
-  const [tempOpis, setTempOpis] = useState('');
-  const [modalOpen, setModalOpen] = useState(false);
-
   const handleChange = (e) => {
-    setForm({
-      ...form,
+    setNewStudy({
+      ...newStudy,
       [e.target.name]: e.target.value,
     });
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();   
-    onAddStudy(form);
+    e.preventDefault();
 
-    setForm({
+    const updatedList = [...form, newStudy];
+    setForm(updatedList);
+    onAddStudy(newStudy);
+
+    setNewStudy({
       poziom: '',
       szkola: '',
       dataStart: '',
@@ -36,7 +41,7 @@ function StudyForm({ onAddStudy = () => {} }) {
   };
 
   const openModal = () => {
-    setTempOpis(form.opis);
+    setTempOpis(newStudy.opis);
     setModalOpen(true);
   };
 
@@ -45,75 +50,86 @@ function StudyForm({ onAddStudy = () => {} }) {
   };
 
   const saveOpis = () => {
-    setForm({ ...form, opis: tempOpis });
+    setNewStudy({ ...newStudy, opis: tempOpis });
     closeModal();
+  };
+
+  const handleDelete = (index) => {
+    const updatedList = form.filter((_, i) => i !== index);
+    setForm(updatedList);
+    onRemoveStudy(updatedList);
   };
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-1">
-          <label htmlFor="poziom" className="form-label-sm">{t('educationLevel')}</label>
-          <input
-            type="text"
-            className="form-control-sm"
-            id="poziom"
-            name="poziom"
-            value={form.poziom}
-            onChange={handleChange}
-          />
-        </div>
+      {!deletePanel && (
+        <form onSubmit={handleSubmit}>
+          <div className="mb-1">
+            <label htmlFor="poziom" className="form-label-sm">{t('educationLevel')}</label>
+            <input
+              type="text"
+              className="form-control-sm"
+              id="poziom"
+              name="poziom"
+              value={newStudy.poziom}
+              onChange={handleChange}
+            />
+          </div>
 
-        <div className="mb-1">
-          <label htmlFor="szkola" className="form-label-sm">{t('school')}</label>
-          <input
-            type="text"
-            className="form-control-sm"
-            id="szkola"
-            name="szkola"
-            value={form.szkola}
-            onChange={handleChange}
-          />
-        </div>
+          <div className="mb-1">
+            <label htmlFor="szkola" className="form-label-sm">{t('school')}</label>
+            <input
+              type="text"
+              className="form-control-sm"
+              id="szkola"
+              name="szkola"
+              value={newStudy.szkola}
+              onChange={handleChange}
+            />
+          </div>
 
-        <div className="mb-1">
-          <label className="form-label-sm">{t('startDate')}</label>
-          <input
-            type="date"
-            className="form-control-sm"
-            name="dataStart"
-            value={form.dataStart}
-            onChange={handleChange}
-          />
-        </div>
+          <div className="mb-1">
+            <label className="form-label-sm">{t('startDate')}</label>
+            <input
+              type="date"
+              className="form-control-sm"
+              name="dataStart"
+              value={newStudy.dataStart}
+              onChange={handleChange}
+            />
+          </div>
 
-        <div className="mb-2">
-          <label className="form-label-sm">{t('endDate')}</label>
-          <input
-            type="date"
-            className="form-control-sm"
-            name="dataEnd"
-            value={form.dataEnd}
-            onChange={handleChange}
-          />
-        </div>
+          <div className="mb-2">
+            <label className="form-label-sm">{t('endDate')}</label>
+            <input
+              type="date"
+              className="form-control-sm"
+              name="dataEnd"
+              value={newStudy.dataEnd}
+              onChange={handleChange}
+            />
+          </div>
 
-        <div className="mb-3">
-          <label className="form-label-sm">{t('description')}</label>
-          <input
-            type="text"
-            className="form-control-sm"
-            name="opis"
-            value={form.opis}
-            onClick={openModal}
-            readOnly
-            placeholder={t('clickToAddDescription')}
-            style={{ cursor: 'pointer' }}
-          />
-        </div>
+          <div className="mb-3">
+            <label className="form-label-sm">{t('description')}</label>
+            <input
+              type="text"
+              className="form-control-sm"
+              name="opis"
+              value={newStudy.opis}
+              onClick={openModal}
+              readOnly
+              placeholder={t('clickToAddDescription')}
+              style={{ cursor: 'pointer' }}
+            />
+          </div>
 
-        <button type="submit" className="btn btn-abi">{t('add')}</button>
-      </form>
+          <button type="submit" className="btn btn-abi">{t('add')}</button>
+          <button type="button" className="btn btn-abi ms-2" onClick={() => setDeletePanel(prev => !prev)}>
+            {t('delete')}
+          </button>
+        </form>
+      )}
 
       {/* Modal */}
       {modalOpen && (
@@ -151,8 +167,37 @@ function StudyForm({ onAddStudy = () => {} }) {
           </div>
         </div>
       )}
+
+      {/* Lista studiów z opcją usunięcia */}
+      {deletePanel && (
+        <div className="container mt-3">
+          <ul className="list-group">
+            {form.length === 0 && (
+              <li className="list-group-item">{t('noStudies') || 'Brak zapisanych studiów'}</li>
+            )}
+            {form.map((data, id) => (
+              <li key={id} className="list-group-item d-flex justify-content-between align-items-start list-item-style">
+                <div>
+                  <strong>{data.szkola}</strong> | {data.poziom}<br />
+                  {data.dataStart} - {data.dataEnd}<br />
+                  <em>{data.opis}</em>
+                </div>
+                <button
+                  className="btn btn-danger btn-sm"
+                  onClick={() => handleDelete(id)}
+                >
+                  {t('delete')}
+                </button>
+              </li>
+            ))}
+          </ul>
+          <button className='btn btn-secondary mt-3' onClick={() => setDeletePanel(false)}>
+            {t('back')}
+          </button>
+        </div>
+      )}
     </>
   );
-};
+}
 
 export default StudyForm;

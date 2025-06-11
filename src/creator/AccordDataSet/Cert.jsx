@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-const Cert = ({ onAddCert = () => {} }) => {
+const Cert = ({ onAddCert = () => {}, onRemoveCert = () => {} }) => {
   const { t } = useTranslation();
+
+  const [certList, setCertList] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [tempOpis, setTempOpis] = useState('');
+  const [deletePanel, setDeletePanel] = useState(false);
+
   const [form, setForm] = useState({
     nazwa: '',
     data: '',
     organizator: '',
     opis: ''
   });
-
-  const [tempOpis, setTempOpis] = useState('');
-  const [modalOpen, setModalOpen] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -33,7 +36,10 @@ const Cert = ({ onAddCert = () => {} }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onAddCert(form);  // <-- wywołanie callbacku z poprawną nazwą
+    const updatedList = [...certList, form];
+    setCertList(updatedList);
+    onAddCert(form);
+
     setForm({
       nazwa: '',
       data: '',
@@ -42,63 +48,105 @@ const Cert = ({ onAddCert = () => {} }) => {
     });
   };
 
+  const handleDelete = (index) => {
+    const updatedList = certList.filter((_, i) => i !== index);
+    setCertList(updatedList);
+    onRemoveCert(updatedList);
+  };
+
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label htmlFor="nazwa" className="form-label">{t('name')}</label>
-          <input
-            type="text"
-            className="form-control-sm"
-            id="nazwa"
-            name="nazwa"
-            value={form.nazwa}
-            onChange={handleChange}
-          />
+      {!deletePanel && (
+        <form onSubmit={handleSubmit}>
+          <div className="mb-3">
+            <label htmlFor="nazwa" className="form-label">{t('name')}</label>
+            <input
+              type="text"
+              className="form-control-sm"
+              id="nazwa"
+              name="nazwa"
+              value={form.nazwa}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="mb-3">
+            <label htmlFor="data" className="form-label">{t('date')}</label>
+            <input
+              type="date"
+              className="form-control-sm"
+              id="data"
+              name="data"
+              value={form.data}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="mb-3">
+            <label htmlFor="organizator" className="form-label">{t('organizer')}</label>
+            <input
+              type="text"
+              className="form-control-sm"
+              id="organizator"
+              name="organizator"
+              value={form.organizator}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="mb-3">
+            <label htmlFor="opis" className="form-label">{t('description')}</label>
+            <input
+              type="text"
+              className="form-control-sm"
+              id="opis"
+              name="opis"
+              value={form.opis}
+              readOnly
+              onClick={openModal}
+              placeholder={t('placeholderDescription')}
+              style={{ cursor: 'pointer' }}
+            />
+          </div>
+
+          <button type="submit" className="btn btn-abi">{t('add')}</button>
+          <button type="button" className="btn btn-abi ms-2" onClick={() => setDeletePanel(prev => !prev)}>
+            {t('delete')}
+          </button>
+        </form>
+      )}
+
+      {/* Lista certyfikatów */}
+      {deletePanel && (
+        <div className="mt-4">
+          <h5>{t('certificatesList') || 'Lista certyfikatów'}</h5>
+          <ul className="list-group">
+            {certList.map((cert, idx) => (
+              <li
+                key={idx}
+                className="list-group-item d-flex justify-content-between align-items-start"
+              >
+                <div>
+                  <strong>{cert.nazwa}</strong> ({cert.data})<br />
+                  {cert.organizator}<br />
+                  <em>{cert.opis}</em>
+                </div>
+                <button
+                  className="btn btn-danger btn-sm ms-3"
+                  onClick={() => handleDelete(idx)}
+                >
+                  {t('delete')}
+                </button>
+              </li>
+            ))}
+          </ul>
+          <button type="button" className="btn btn-abi ms-2" onClick={() => setDeletePanel(prev => !prev)}>
+            {t('back')}
+          </button>
         </div>
+      )}
 
-        <div className="mb-3">
-          <label htmlFor="data" className="form-label">{t('date')}</label>
-          <input
-            type="date"
-            className="form-control-sm"
-            id="data"
-            name="data"
-            value={form.data}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="mb-3">
-          <label htmlFor="organizator" className="form-label">{t('organizer')}</label>
-          <input
-            type="text"
-            className="form-control-sm"
-            id="organizator"
-            name="organizator"
-            value={form.organizator}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="mb-3">
-          <label htmlFor="opis" className="form-label">{t('description')}</label>
-          <input
-            type="text"
-            className="form-control-sm"
-            id="opis"
-            name="opis"
-            value={form.opis}
-            readOnly
-            onClick={openModal}
-            placeholder={t('placeholderDescription')}
-            style={{ cursor: 'pointer' }}
-          />
-        </div>
-
-        <button type="submit" className="btn btn-abi">{t('add')}</button>
-      </form>
-
+      {/* Modal */}
       {modalOpen && (
         <div
           className="modal fade show"

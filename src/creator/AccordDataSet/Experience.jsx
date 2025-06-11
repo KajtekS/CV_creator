@@ -22,7 +22,6 @@ const Experience = ({ onAddExperience = () => {}, onRemoveExperience = () => {} 
   const [modalOpen, setModalOpen] = useState(false);
   const [deletePanel, setDeletePanel] = useState(false);
 
-  // Obsługa zmiany pojedynczego formularza
   const handleChange = (e) => {
     setNewExperience({ ...newExperience, [e.target.name]: e.target.value });
   };
