@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import './styles.css';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 function PageSimulator({ 
     personalData = {},
@@ -9,7 +11,25 @@ function PageSimulator({
     language = [],
     abilities = []
 }) {
+    const pdfRef = useRef();
+
+    const generatePdf = () => {
+        const input = pdfRef.current;
+        html2canvas(input, { scale: 2 }).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const imgProps = pdf.getImageProperties(imgData);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        pdf.save("cv.pdf");
+        });
+    };
+
     return (
+        <>
+        <button className='btn btn-primary' onClick={generatePdf}>GEN PDF</button>
+        <div ref={pdfRef}>
         <div className="container mt-4">
             <div className="row">
                 {/* Lewa kolumna */}
@@ -94,6 +114,8 @@ function PageSimulator({
                 </div>
             </div>
         </div>
+        </div>
+    </>
     );
 }
 
